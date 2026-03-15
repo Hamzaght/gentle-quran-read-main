@@ -5,6 +5,8 @@ workflows:
 
     environment:
       node: 20
+      android_signing:
+        - HamzaGht
 
     scripts:
       - name: Install dependencies
@@ -16,11 +18,10 @@ workflows:
       - name: Sync Capacitor Android
         script: npx cap sync android
 
-      - name: Build Android App Bundle and APK
+      - name: Build Android App Bundle
         script: |
           cd android
-          ./gradlew bundleRelease assembleDebug
+          ./gradlew bundleRelease
 
     artifacts:
       - android/app/build/outputs/**/*.aab
-      - android/app/build/outputs/**/*.apk
