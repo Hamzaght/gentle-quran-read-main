@@ -1,5 +1,4 @@
 import { Sun, Moon, Type, Globe, Heart, Languages } from 'lucide-react';
-import { Browser } from '@capacitor/browser';
 import { AppSettings, TranslationLanguage, LANGUAGE_NAMES } from '@/types/quran';
 
 interface SettingsScreenProps {
@@ -11,12 +10,6 @@ const fontSizes = [20, 24, 28, 32, 36, 40];
 const languages: TranslationLanguage[] = ['en', 'fr', 'de', 'es'];
 
 export default function SettingsScreen({ settings, onUpdateSettings }: SettingsScreenProps) {
-  const openDonationLink = async () => {
-    await Browser.open({
-      url: 'https://www.paypal.com/donate?campaign_id=3VEK9EFAP849J',
-    });
-  };
-
   return (
     <div className="flex flex-col min-h-screen pb-20">
       {/* Green header */}
@@ -28,7 +21,7 @@ export default function SettingsScreen({ settings, onUpdateSettings }: SettingsS
         {/* Display section */}
         <section>
           <h3 className="text-xs font-semibold text-muted-foreground font-ui uppercase tracking-wider mb-3 mt-6">Display</h3>
-
+          
           <button
             onClick={() => onUpdateSettings({ darkMode: !settings.darkMode })}
             className="w-full flex items-center justify-between p-4 bg-card border border-border rounded-xl mb-2 shadow-sm"
@@ -69,7 +62,7 @@ export default function SettingsScreen({ settings, onUpdateSettings }: SettingsS
         {/* Translation section */}
         <section>
           <h3 className="text-xs font-semibold text-muted-foreground font-ui uppercase tracking-wider mb-3">Translation</h3>
-
+          
           <button
             onClick={() => onUpdateSettings({ showTranslation: !settings.showTranslation })}
             className="w-full flex items-center justify-between p-4 bg-card border border-border rounded-xl mb-3 shadow-sm"
@@ -120,8 +113,13 @@ export default function SettingsScreen({ settings, onUpdateSettings }: SettingsS
               Your support helps maintain and improve the app, and also contributes to charitable causes for people in need.
             </p>
             <button
-              onClick={openDonationLink}
-              className="inline-block px-6 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium font-ui transition-colors hover:opacity-90"
+              onClick={() =>
+                window.open(
+                  'https://www.paypal.com/donate?campaign_id=3VEK9EFAP849J',
+                  '_blank'
+                )
+              }
+              className="px-6 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium font-ui transition-colors hover:opacity-90"
             >
               Support the project ❤️
             </button>
