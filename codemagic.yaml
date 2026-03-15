@@ -14,10 +14,11 @@ workflows:
       - name: Sync Capacitor Android
         script: npx cap sync android
 
-     - name: Build Android App Bundle
-       script: |
-      cd android
-      ./gradlew bundleRelease
+      - name: Build Android App Bundle
+        script: |
+          cd android
+          ./gradlew bundleRelease
 
     artifacts:
+      - android/app/build/outputs/**/*.aab
       - android/app/build/outputs/**/*.apk
