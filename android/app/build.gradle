@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     namespace "app.quranflow.reader"
-
     compileSdk 35
 
     defaultConfig {
@@ -18,14 +17,25 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            if (System.getenv("CM_KEYSTORE_PATH") != null && !System.getenv("CM_KEYSTORE_PATH").isEmpty()) {
+                storeFile file(System.getenv("CM_KEYSTORE_PATH"))
+                storePassword System.getenv("CM_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("CM_KEY_ALIAS")
+                keyPassword System.getenv("CM_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
-            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            signingConfig signingConfigs.debug
+            minifyEnabled false
         }
     }
 }
@@ -38,11 +48,9 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
-
     implementation project(':capacitor-android')
     implementation project(':capacitor-cordova-android-plugins')
 
@@ -55,7 +63,7 @@ apply from: 'capacitor.build.gradle'
 
 try {
     def servicesJSON = file('google-services.json')
-    if (servicesJSON.text) {
+    if (servicesJSON.exists() && servicesJSON.text) {
         apply plugin: 'com.google.gms.google-services'
     }
 } catch(Exception e) {
