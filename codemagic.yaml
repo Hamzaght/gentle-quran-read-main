@@ -10,18 +10,32 @@ workflows:
 
     scripts:
       - name: Install dependencies
-        script: npm install
+        script: |
+          npm install
 
       - name: Build web app
-        script: npm run build
+        script: |
+          npm run build
 
       - name: Sync Capacitor Android
-        script: npx cap sync android
+        script: |
+          npx cap sync android
 
+      # ✅ Build APK (for testing)
+      - name: Build Android APK
+        script: |
+          cd android
+          ./gradlew assembleRelease
+
+      # ✅ Build AAB (for Play Store later)
       - name: Build Android App Bundle
         script: |
           cd android
           ./gradlew bundleRelease
 
     artifacts:
+      # APK (for direct install/testing)
+      - android/app/build/outputs/**/*.apk
+
+      # AAB (for Play Store)
       - android/app/build/outputs/**/*.aab
